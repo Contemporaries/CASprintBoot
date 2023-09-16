@@ -1,0 +1,35 @@
+[
+    {
+        "name": "JAVA:PV:Integer",
+        "type": "int",
+        "unit": "i",
+        "high": 100,
+        "hihi": 200,
+        "precision": 2,
+        "scan": 1.0
+    },
+    {
+        "name": "JAVA:PV:Double",
+        "type": "double",
+        "unit": "d",
+        "high": 100,
+        "hihi": 200,
+        "precision": 2,
+        "scan": 1.0
+    },
+    {
+        "name": "JAVA:PV:Float",
+        "type": "float",
+        "unit": "f",
+        "high": 100,
+        "hihi": 200,
+        "precision": 2,
+        "scan": 1.0
+    },
+    {
+        "name": "JAVA:PV:String",
+        "type": "str",
+        "unit": "t",
+        "scan": 1.0
+    }
+]

@@ -14,8 +14,7 @@ import java.util.Properties;
 @Component
 public class CAClientExample {
 
-    private static final String LVPPVPrefix_1 = "JUNO:JM01:";
-    private static final String LVPPVPrefix_2 = "JUNO:JM02:";
+    private static final String JAVA_PV_PREFIX = "JAVA:PV:";
 
     @Value("${pv.caAddressList}")
     private String caAddressList;
@@ -28,7 +27,7 @@ public class CAClientExample {
         Context context = new Context(withCaList);
         try {
             Channel<Double> doubleChannel = PVChannelEntity
-                    .withGenericsChannel(context, LVPPVPrefix_1, "LVPtest:Channel12:Voltage", Double.class);
+                    .withGenericsChannel(context, JAVA_PV_PREFIX, "Double", Double.class);
             String connectState = doubleChannel.connectAsync().get().getConnectionState().name();
             if (!connectState.equals("CONNECTED")) {
                 System.out.println(connectState);
@@ -36,6 +35,7 @@ public class CAClientExample {
                 context.close();
             }
             System.out.println(doubleChannel.getAsync().get());
+            doubleChannel.getProperties().forEach((k, v) -> System.out.println(k + "  " + v));
             doubleChannel.close();
             context.close();
         } catch (Exception e) {

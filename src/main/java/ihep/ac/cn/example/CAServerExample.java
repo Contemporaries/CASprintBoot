@@ -3,8 +3,10 @@ package ihep.ac.cn.example;
 
 import com.cosylab.epics.caj.cas.CAJServerContext;
 import gov.aps.jca.CAException;
+import ihep.ac.cn.config.PVJson;
 import ihep.ac.cn.entity.CAServerEntity;
 import ihep.ac.cn.factory.PVFactory;
+import ihep.ac.cn.factory.PVJsonFactory;
 import ihep.ac.cn.pv.PV;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,9 @@ public class CAServerExample {
     @Resource
     private PVFactory pvFactory;
 
+    @Resource
+    private PVJsonFactory pvJsonFactory;
+
     @Value("${pv.tcpPort}")
     private int tcpPort;
 
@@ -35,13 +40,7 @@ public class CAServerExample {
             context.setUdpServerPort(udpPort);
             context.initialize(caServer);
             context.printInfo();
-            HashMap<String, Object> pvList = new HashMap<>();
-            pvList.put("PV:STRING", "str value");
-            pvList.put("PV:DOUBLE", 1.01);
-            pvList.put("PV:FLOAT", (float) 1.21);
-            pvList.put("PV:SHORT", (short) 45);
-            pvList.put("PV:INT", 824);
-            ArrayList<PV> pvs = pvFactory.createPVs(pvList);
+            ArrayList<PV> pvs = pvFactory.createPVsByJson(pvJsonFactory.pvJsonToPV());
             System.out.println("pvs size: " + pvs.size());
             caServer.registerPVs(pvs);
             caServer.pvList();

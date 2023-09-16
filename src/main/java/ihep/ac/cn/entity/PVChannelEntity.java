@@ -29,6 +29,10 @@ public class PVChannelEntity {
         return context.createChannel(setPvName(prefix, pvName), channelType);
     }
 
+    public static <T> Channel<T> withGenericsChannel(Context context, String pvName, Class<T> channelType) {
+        return context.createChannel(pvName, channelType);
+    }
+
     protected static String setPvName(String prefix, String pvName) {
         return prefix + pvName;
     }

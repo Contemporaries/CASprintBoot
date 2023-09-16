@@ -1,6 +1,7 @@
 package ihep.ac.cn.factory;
 
 import gov.aps.jca.dbr.*;
+import ihep.ac.cn.config.PVJson;
 import ihep.ac.cn.entity.CAServerEntity;
 import ihep.ac.cn.pv.PV;
 import jakarta.annotation.Resource;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class PVFactory {
@@ -15,31 +17,42 @@ public class PVFactory {
     @Resource
     private CAServerEntity caServer;
 
-    public ArrayList<PV> createPVs(HashMap<String, Object> list) {
+    public ArrayList<PV> createPVsByJson(List<PVJson> pvJsons) {
         ArrayList<PV> result = new ArrayList<>();
-        list.forEach((k, v) -> {
-            String name = v.getClass().getName();
-            switch (name) {
-                case "java.lang.Integer":
-                    int intValue = (int) v;
-                    result.add(caServer.createPV(k, DBR_Int.TYPE, new int[]{intValue}));
+        pvJsons.forEach(pvJson -> {
+            String type = pvJson.getType();
+            String name = pvJson.getName();
+            switch (type) {
+                case "int": {
+                    PV pv = caServer.createPV(name, DBR_Int.TYPE, new int[]{0});
+                    setPVParams(pv, pvJson);
+                    result.add(pv);
                     break;
-                case "java.lang.String":
-                    String strValue = (String) v;
-                    result.add(caServer.createPV(k, DBR_String.TYPE, new String[]{strValue}));
+                }
+                case "double": {
+                    PV pv = caServer.createPV(name, DBR_Double.TYPE, new double[]{0});
+                    setPVParams(pv, pvJson);
+                    result.add(pv);
                     break;
-                case "java.lang.Double":
-                    double douValue = (double) v;
-                    result.add(caServer.createPV(k, DBR_Double.TYPE, new double[]{douValue}));
+                }
+                case "short": {
+                    PV pv = caServer.createPV(name, DBR_Short.TYPE, new int[]{0});
+                    setPVParams(pv, pvJson);
+                    result.add(pv);
                     break;
-                case "java.lang.Float":
-                    float floatValue = (float) v;
-                    result.add(caServer.createPV(k, DBR_Float.TYPE, new float[]{floatValue}));
+                }
+                case "str": {
+                    PV pv = caServer.createPV(name, DBR_String.TYPE, new String[]{"0"});
+                    setPVParams(pv, pvJson);
+                    result.add(pv);
                     break;
-                case "java.lang.Short":
-                    short shortValue = (short) v;
-                    result.add(caServer.createPV(k, DBR_Short.TYPE, new short[]{shortValue}));
+                }
+                case "float": {
+                    PV pv = caServer.createPV(name, DBR_Float.TYPE, new float[]{0});
+                    setPVParams(pv, pvJson);
+                    result.add(pv);
                     break;
+                }
                 default:
                     try {
                         throw new ClassNotFoundException(name + " not support");
@@ -48,8 +61,18 @@ public class PVFactory {
                     }
                     break;
             }
+
         });
         return result;
+    }
+
+    protected void setPVParams(PV pv, PVJson pvJson) {
+        pv.setLowerAlarmLimit(pvJson.getHigh());
+        pv.setLowerWarningLimit(pvJson.getHihi());
+        pv.setUpperAlarmLimit(pvJson.getHigh());
+        pv.setUpperWarningLimit(pvJson.getHihi());
+        pv.setPrecision(pvJson.getPrecision());
+        pv.setUnits(pvJson.getUnit());
     }
 
 }
