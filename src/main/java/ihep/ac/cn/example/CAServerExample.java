@@ -3,7 +3,6 @@ package ihep.ac.cn.example;
 
 import com.cosylab.epics.caj.cas.CAJServerContext;
 import gov.aps.jca.CAException;
-import ihep.ac.cn.config.PVJson;
 import ihep.ac.cn.entity.CAServerEntity;
 import ihep.ac.cn.factory.PVFactory;
 import ihep.ac.cn.factory.PVJsonFactory;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @Component
 public class CAServerExample {
@@ -35,6 +33,7 @@ public class CAServerExample {
 
     public void start() {
         CAJServerContext context = new CAJServerContext();
+
         try {
             context.setTcpServerPort(tcpPort);
             context.setUdpServerPort(udpPort);

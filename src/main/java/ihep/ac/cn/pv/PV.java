@@ -194,7 +194,7 @@ public class PV extends ProcessVariable {
         this.value = value.getValue();
         this.count = java.lang.reflect.Array.getLength(this.value);
         this.timestamp = new TimeStamp();
-
+        System.out.println(this.name);
         // notify
         if (interest) {
             DBR monitorDBR = AbstractCASResponseHandler.createDBRforReading(this);

@@ -8,7 +8,6 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -49,6 +48,7 @@ public class PVFactory {
                 }
                 case "float": {
                     PV pv = caServer.createPV(name, DBR_Float.TYPE, new float[]{0});
+                    pv.write(new DBR_Float(new float[]{(float) 100.1}), null);
                     setPVParams(pv, pvJson);
                     result.add(pv);
                     break;
@@ -72,6 +72,10 @@ public class PVFactory {
         pv.setUpperAlarmLimit(pvJson.getHigh());
         pv.setUpperWarningLimit(pvJson.getHihi());
         pv.setPrecision(pvJson.getPrecision());
+        pv.setLowerCtrlLimit(pvJson.getHihi());
+        pv.setUpperCtrlLimit(pvJson.getHihi());
+        pv.setLowerDispLimit(pvJson.getHigh());
+        pv.setUpperDispLimit(pvJson.getHigh());
         pv.setUnits(pvJson.getUnit());
     }
 
