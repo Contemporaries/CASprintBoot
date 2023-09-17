@@ -1,23 +1,19 @@
 package ihep.ac.cn.factory;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.epics.ca.Channel;
 import org.epics.ca.Context;
 import org.epics.ca.impl.ProtocolConfiguration;
-import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-@Component
-@NoArgsConstructor
+@Slf4j
 public class PVChannelFactory {
 
 
-    @Getter
-    private final Properties properties = new Properties();
     @Setter
     @Getter
     private Context context;
@@ -26,25 +22,28 @@ public class PVChannelFactory {
     @Getter
     private String pvName;
 
-    public PVChannelFactory(String pvName) {
+    public PVChannelFactory(String pvName, Properties properties) {
         this.pvName = pvName;
         this.context = new Context(properties);
     }
 
-    public PVChannelFactory setProperties(String caPort, String caAddressList) {
+    public static Properties setProperties(String caPort, String caAddressList) {
+        Properties properties = new Properties();
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_REPEATER_PORT.name(), caPort);
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_ADDR_LIST.name(), caAddressList);
-        return this;
+        return properties;
     }
 
-    public PVChannelFactory setCaPort(String caPort) {
+    public static Properties setCaPort(String caPort) {
+        Properties properties = new Properties();
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_REPEATER_PORT.name(), caPort);
-        return this;
+        return properties;
     }
 
-    public PVChannelFactory setCaAddressList(String caAddressList) {
+    public static Properties setCaAddressList(String caAddressList) {
+        Properties properties = new Properties();
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_ADDR_LIST.name(), caAddressList);
-        return this;
+        return properties;
     }
 
     public Channel<Integer> intChannel() {
@@ -75,8 +74,20 @@ public class PVChannelFactory {
         return channelType.getAsync().get();
     }
 
+    public <T> void isConnect(Channel<T> channel) throws ExecutionException, InterruptedException {
+        String connectState = channel.connectAsync().get().getConnectionState().name();
+        log.info("PV CA Client connectivity state: " + connectState);
+        boolean connected = connectState.equals("CONNECTED");
+        if (!connected)
+            channel.close();
+    }
+
     public void close() {
         context.close();
+    }
+
+    public <T> void printChannelInfo(Channel<T> channel) {
+        channel.getProperties().forEach((k, v) -> log.info(k + ": " + v));
     }
 
 }
