@@ -9,11 +9,13 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 
+@Slf4j
 @Component
 public class NettyClientExample {
 
@@ -56,7 +58,7 @@ public class NettyClientExample {
 
             cf.channel().closeFuture().sync();
         } catch (Exception ignored) {
-            System.out.println("error");
+            log.error("Netty client occurred error");
         }
     }
 

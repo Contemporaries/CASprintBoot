@@ -6,6 +6,7 @@ import gov.aps.jca.CAStatusException;
 import gov.aps.jca.cas.*;
 import gov.aps.jca.dbr.DBRType;
 import ihep.ac.cn.pv.PV;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+@Slf4j
 @Component
 public class CAServerEntity implements Server {
     protected final Map<String, PV> pvs = new HashMap<>();
@@ -29,19 +31,19 @@ public class CAServerEntity implements Server {
             DBRType type = v.getType();
             if (type.isINT()) {
                 int[] value = (int[]) v.getValue();
-                System.out.println(v.getName() + " " + value[0]);
+                log.info(v.getName() + " " + value[0]);
             } else if (type.isDOUBLE()) {
                 double[] value = (double[]) v.getValue();
-                System.out.println(v.getName() + " " + value[0]);
+                log.info(v.getName() + " " + value[0]);
             } else if (type.isSTRING()) {
                 String[] value = (String[]) v.getValue();
-                System.out.println(v.getName() + " " + value[0]);
+                log.info(v.getName() + " " + value[0]);
             } else if (type.isSHORT()) {
                 short[] value = (short[]) v.getValue();
-                System.out.println(v.getName() + " " + value[0]);
+                log.info(v.getName() + " " + value[0]);
             } else if (type.isFLOAT()) {
                 float[] value = (float[]) v.getValue();
-                System.out.println(v.getName() + " " + value[0]);
+                log.info(v.getName() + " " + value[0]);
             }
         });
     }

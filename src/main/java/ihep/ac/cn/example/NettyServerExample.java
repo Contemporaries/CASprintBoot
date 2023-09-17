@@ -13,10 +13,12 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
+@Slf4j
 @Component
 public class NettyServerExample {
 
@@ -47,7 +49,7 @@ public class NettyServerExample {
 
             try {
                 ChannelFuture cf = serverBootstrap.bind(port).sync();
-                System.out.println("LVP Server started on " + port);
+                log.info("Netty server started on " + port);
                 cf.channel().closeFuture().sync();
             } catch (InterruptedException e) {
                 e.printStackTrace();

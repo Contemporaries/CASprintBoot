@@ -24,32 +24,32 @@ public class PVFactory {
             switch (type) {
                 case "int": {
                     PV pv = caServer.createPV(name, DBR_Int.TYPE, new int[]{0});
-                    setPVParams(pv, pvJson);
+                    initPVParams(pv, pvJson);
                     result.add(pv);
                     break;
                 }
                 case "double": {
                     PV pv = caServer.createPV(name, DBR_Double.TYPE, new double[]{0});
-                    setPVParams(pv, pvJson);
+                    initPVParams(pv, pvJson);
                     result.add(pv);
                     break;
                 }
                 case "short": {
                     PV pv = caServer.createPV(name, DBR_Short.TYPE, new int[]{0});
-                    setPVParams(pv, pvJson);
+                    initPVParams(pv, pvJson);
                     result.add(pv);
                     break;
                 }
                 case "str": {
                     PV pv = caServer.createPV(name, DBR_String.TYPE, new String[]{"0"});
-                    setPVParams(pv, pvJson);
+                    initPVParams(pv, pvJson);
                     result.add(pv);
                     break;
                 }
                 case "float": {
                     PV pv = caServer.createPV(name, DBR_Float.TYPE, new float[]{0});
                     pv.write(new DBR_Float(new float[]{(float) 100.1}), null);
-                    setPVParams(pv, pvJson);
+                    initPVParams(pv, pvJson);
                     result.add(pv);
                     break;
                 }
@@ -66,7 +66,7 @@ public class PVFactory {
         return result;
     }
 
-    protected void setPVParams(PV pv, PVJson pvJson) {
+    protected void initPVParams(PV pv, PVJson pvJson) {
         pv.setLowerAlarmLimit(pvJson.getHigh());
         pv.setLowerWarningLimit(pvJson.getHihi());
         pv.setUpperAlarmLimit(pvJson.getHigh());

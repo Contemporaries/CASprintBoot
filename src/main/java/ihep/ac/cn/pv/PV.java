@@ -9,7 +9,9 @@ import gov.aps.jca.cas.ProcessVariableEventCallback;
 import gov.aps.jca.cas.ProcessVariableReadCallback;
 import gov.aps.jca.cas.ProcessVariableWriteCallback;
 import gov.aps.jca.dbr.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PV extends ProcessVariable {
 
     protected DBRType type;
@@ -194,7 +196,9 @@ public class PV extends ProcessVariable {
         this.value = value.getValue();
         this.count = java.lang.reflect.Array.getLength(this.value);
         this.timestamp = new TimeStamp();
-        System.out.println(this.name);
+        if (this.type.isSTRING())
+            log.info("PV Put ==> " + this.name + " " + isString(value));
+        log.info("PV Put ==> " + this.name + " " + isNumber(value));
         // notify
         if (interest) {
             DBR monitorDBR = AbstractCASResponseHandler.createDBRforReading(this);
@@ -207,5 +211,28 @@ public class PV extends ProcessVariable {
         return CAStatus.NORMAL;
     }
 
+    public Number isNumber(DBR value) {
+        if (value.isDOUBLE()) {
+            double[] doubleValue = (double[]) value.getValue();
+            return doubleValue[0];
+        } else if (value.isSHORT()) {
+            short[] shortValue = (short[]) value.getValue();
+            return shortValue[0];
+        } else if (value.isINT()) {
+            int[] intValue = (int[]) value.getValue();
+            return intValue[0];
+        } else if (value.isFLOAT()) {
+            float[] floatValue = (float[]) value.getValue();
+            return floatValue[0];
+        } else {
+            log.info(this.name + " of type not number");
+            return null;
+        }
+    }
+
+    public String isString(DBR value) {
+        String[] strValue = (String[]) value.getValue();
+        return strValue[0];
+    }
 
 }

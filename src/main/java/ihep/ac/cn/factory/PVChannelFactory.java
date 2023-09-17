@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.epics.ca.Channel;
 import org.epics.ca.Context;
+import org.epics.ca.impl.ProtocolConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
@@ -31,18 +32,18 @@ public class PVChannelFactory {
     }
 
     public PVChannelFactory setProperties(String caPort, String caAddressList) {
-        properties.setProperty("EPICS_CA_REPEATER_PORT", caPort);
-        properties.setProperty("EPICS_CA_ADDR_LIST", caAddressList);
+        properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_REPEATER_PORT.name(), caPort);
+        properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_ADDR_LIST.name(), caAddressList);
         return this;
     }
 
     public PVChannelFactory setCaPort(String caPort) {
-        properties.setProperty("EPICS_CA_REPEATER_PORT", caPort);
+        properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_REPEATER_PORT.name(), caPort);
         return this;
     }
 
     public PVChannelFactory setCaAddressList(String caAddressList) {
-        properties.setProperty("EPICS_CA_ADDR_LIST", caAddressList);
+        properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_ADDR_LIST.name(), caAddressList);
         return this;
     }
 

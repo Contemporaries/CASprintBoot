@@ -8,11 +8,13 @@ import ihep.ac.cn.factory.PVFactory;
 import ihep.ac.cn.factory.PVJsonFactory;
 import ihep.ac.cn.pv.PV;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+@Slf4j
 @Component
 public class CAServerExample {
 
@@ -33,14 +35,13 @@ public class CAServerExample {
 
     public void start() {
         CAJServerContext context = new CAJServerContext();
-
         try {
             context.setTcpServerPort(tcpPort);
             context.setUdpServerPort(udpPort);
             context.initialize(caServer);
-            context.printInfo();
+            printInfo(context);
             ArrayList<PV> pvs = pvFactory.createPVsByJson(pvJsonFactory.pvJsonToPV());
-            System.out.println("pvs size: " + pvs.size());
+            log.info("PV Count: " + pvs.size());
             caServer.registerPVs(pvs);
             caServer.pvList();
             context.run(0);
@@ -53,4 +54,18 @@ public class CAServerExample {
             }
         }
     }
+
+    public void printInfo(CAJServerContext context) {
+        log.info("VERSION: " + context.getVersion().getVersionString());
+        log.info("TCP PORT: " + context.getTcpServerPort());
+        log.info("UDP PORT: " + context.getUdpServerPort());
+        log.info("BEACON PORT: " + context.getBeaconPort());
+        log.info("BEACON PERIOD: " + context.getBeaconPeriod());
+        log.info("IGNORE ADDRESS LIST: " + context.getIgnoreAddressList());
+        log.info("BEACON ADDRESS LIST: " + context.getBeaconAddressList());
+        log.info("BEACON AUTO ADDRESS LIST: " + context.isAutoBeaconAddressList());
+        log.info("MAX ARRAY BYTES: " + context.getMaxArrayBytes());
+        log.info("STATE: " + (context.isInitialized() ? "INITIALIZED" : "NO_INITIALIZED"));
+    }
+
 }
