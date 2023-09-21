@@ -21,26 +21,26 @@ public class CAClientExample {
     private String caAddressList;
 
     public void start() {
-        clientExample();
+        caClientExample();
     }
 
     public boolean isCaAddressList() {
         return StringUtil.isNullOrEmpty(caAddressList);
     }
 
-    public void clientExample() {
+    public void caClientExample() {
         String pvName = JAVA_PV_PREFIX + "Integer";
         if (isCaAddressList())
             caAddressList = "";
         Properties properties = PVChannelFactory.setCaAddressList(caAddressList);
-        PVChannelFactory intChannel = new PVChannelFactory(pvName, properties);
-        Channel<Integer> integerChannel = intChannel.intChannel();
+        PVChannelFactory pvChannelFactory = new PVChannelFactory(properties);
+        Channel<Integer> integerChannel = pvChannelFactory.intChannel(pvName);
         try {
-            intChannel.isConnect(integerChannel);
-            log.info("PV Get ==> " + integerChannel.getName() + " " + intChannel.getValue(integerChannel));
-            intChannel.printChannelInfo(integerChannel);
+            pvChannelFactory.isConnect(integerChannel);
+            log.info("PV Get ==> " + integerChannel.getName() + " " + pvChannelFactory.getValue(integerChannel));
+            pvChannelFactory.printChannelInfo(integerChannel);
             integerChannel.close();
-            intChannel.close();
+            pvChannelFactory.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

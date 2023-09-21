@@ -26,6 +26,10 @@ public class NettyServerExample {
     private int port;
 
     public void start() {
+       nettyServerExample();
+    }
+
+    public void nettyServerExample() {
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

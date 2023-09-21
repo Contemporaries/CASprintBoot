@@ -18,16 +18,11 @@ public class PVChannelFactory {
     @Getter
     private Context context;
 
-    @Setter
-    @Getter
-    private String pvName;
-
-    public PVChannelFactory(String pvName, Properties properties) {
-        this.pvName = pvName;
+    public PVChannelFactory(Properties properties) {
         this.context = new Context(properties);
     }
 
-    public static Properties setProperties(String caPort, String caAddressList) {
+    public static Properties setCapPortAndAddressList(String caPort, String caAddressList) {
         Properties properties = new Properties();
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_REPEATER_PORT.name(), caPort);
         properties.setProperty(ProtocolConfiguration.PropertyNames.EPICS_CA_ADDR_LIST.name(), caAddressList);
@@ -46,27 +41,27 @@ public class PVChannelFactory {
         return properties;
     }
 
-    public Channel<Integer> intChannel() {
+    public Channel<Integer> intChannel(String pvName) {
         return context.createChannel(pvName, Integer.class);
     }
 
-    public Channel<Double> doubleChannel() {
+    public Channel<Double> doubleChannel(String pvName) {
         return context.createChannel(pvName, Double.class);
     }
 
-    public Channel<Float> floatChannel() {
+    public Channel<Float> floatChannel(String pvName) {
         return context.createChannel(pvName, Float.class);
     }
 
-    public Channel<String> stringChannel() {
+    public Channel<String> stringChannel(String pvName) {
         return context.createChannel(pvName, String.class);
     }
 
-    public Channel<Short> shortChannel() {
+    public Channel<Short> shortChannel(String pvName) {
         return context.createChannel(pvName, Short.class);
     }
 
-    public Channel<Byte> byteChannel() {
+    public Channel<Byte> byteChannel(String pvName) {
         return context.createChannel(pvName, Byte.class);
     }
 

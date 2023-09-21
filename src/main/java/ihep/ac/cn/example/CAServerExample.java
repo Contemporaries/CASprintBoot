@@ -34,6 +34,10 @@ public class CAServerExample {
     private int udpPort;
 
     public void start() {
+       caServerExample();
+    }
+
+    public void caServerExample() {
         CAJServerContext context = new CAJServerContext();
         try {
             context.setTcpServerPort(tcpPort);
